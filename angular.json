@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/reproduce-bun-readonly-global",
+            "outputPath": "dist/reproduce-bun-readonly-global/browser",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -97,6 +97,61 @@
             ],
             "scripts": []
           }
+        },
+        "server": {
+          "builder": "@angular-devkit/build-angular:server",
+          "options": {
+            "outputPath": "dist/reproduce-bun-readonly-global/server",
+            "main": "server.ts",
+            "tsConfig": "tsconfig.server.json",
+            "inlineStyleLanguage": "scss"
+          },
+          "configurations": {
+            "production": {
+              "outputHashing": "media"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false,
+              "vendorChunk": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "configurations": {
+            "development": {
+              "browserTarget": "reproduce-bun-readonly-global:build:development",
+              "serverTarget": "reproduce-bun-readonly-global:server:development"
+            },
+            "production": {
+              "browserTarget": "reproduce-bun-readonly-global:build:production",
+              "serverTarget": "reproduce-bun-readonly-global:server:production"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "reproduce-bun-readonly-global:build:production",
+              "serverTarget": "reproduce-bun-readonly-global:server:production"
+            },
+            "development": {
+              "browserTarget": "reproduce-bun-readonly-global:build:development",
+              "serverTarget": "reproduce-bun-readonly-global:server:development"
+            }
+          },
+          "defaultConfiguration": "production"
         }
       }
     }
